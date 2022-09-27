@@ -18,21 +18,21 @@ public class JpaMain {
             // 저장
             Team team = new Team();
             team.setName("TeamA");
-            em.persist(team);
+            em.persist(team);  // 팀을 먼저 저장한 다음
 
             Member member = new Member();
             member.setUsername("member1");
-            member.setTeam(team);  // 영속성으로 인해 위에서 persist()한 team의 id를 가져올 수 있다.
-            em.persist(member);
+            member.changeTeam(team);  // 멤버에 팀을 넣고
+            em.persist(member);  // 멤버를 저장
 
             em.flush();
             em.clear();
 
-            Member findMember = em.find(Member.class, member.getId());
-            List<Member> members = findMember.getTeam().getMembers();
+            Team findTeam = em.find(Team.class, team.getId());
+            List<Member> members = findTeam.getMembers();
 
             for (Member m : members) {
-                System.out.println("@@@@@ m = " + m.getUsername());
+                System.out.println("m = " + m.getUsername());
             }
 
             tx.commit();
