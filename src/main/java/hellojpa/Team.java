@@ -14,7 +14,8 @@ public class Team {
 
     private String name;
 
-    @OneToMany(mappedBy = "team")  // mappedBy는 이 컬럼은 어떤 것이랑 연결되어 있다는 것을 나타내 준다. 여기서는 Member의 team 컬럼이랑 연결되었다는 뜻
+    @OneToMany
+    @JoinColumn(name = "TEAM_ID")
     private List<Member> members = new ArrayList<>();  // 관례로 List는 초기화 해주는게 좋다. 그렇게 해야 add할 때 nullpointer 에러가 안뜨니까.
 
     public Long getId() {
