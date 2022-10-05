@@ -3,7 +3,7 @@ package hellojpa;
 import javax.persistence.*;
 
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)  // 상속은 조인 전략을 사용하겠다는 뜻
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)  // 구현 클래스마다 테이블 전략을 사용하겠다는 뜻
 @DiscriminatorColumn  // Dtype으로 엔티티 명이 들어가게 해주는 어노테이션
 public class Item {
 
