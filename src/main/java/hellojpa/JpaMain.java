@@ -1,5 +1,7 @@
 package hellojpa;
 
+import org.hibernate.Hibernate;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,20 +18,20 @@ public class JpaMain {
 
         try {
 
-            Member member1 = new Member();
-            member1.setUsername("user1");
-            member1.setCreatedBy("kim");
-            member1.setCreatedDate(LocalDateTime.now());
-            em.persist(member1);
+            Child child1 = new Child();
+            Child child2 = new Child();
 
-            em.flush();  // 영속성 컨텍스트에 있는 쿼리 DB에 즉시 날림
-            em.clear();  // 영속성 컨텍스트 제거
+            Parent parent = new Parent();
+            parent.addChild(child1);
+            parent.addChild(child2);
 
-            Member m1 = em.find(Member.class, member1.getId());  // m1이 영속성 컨텍스트에 올라가있는 상태
-            System.out.println("m1 = " + m1.getClass());
+            em.persist(parent);
 
-            Member reference = em.getReference(Member.class, member1.getId());
-            System.out.println("reference = " + reference.getClass());
+            em.flush();
+            em.clear();
+
+            Parent findParent = em.find(Parent.class, parent.getId());
+            findParent.getChildList().remove(0);
 
             tx.commit();
         } catch (Exception e) {
