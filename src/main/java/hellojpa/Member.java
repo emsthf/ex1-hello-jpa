@@ -1,6 +1,7 @@
 package hellojpa;
 
 import javax.persistence.*;
+import java.lang.management.MemoryType;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -17,24 +18,18 @@ public class Member {
     @Column(name = "USERNAME")
     private String username;
 
-    //주소
-    @Embedded
-    private Address homeAddress;
+    private int age;
 
-    @ElementCollection
-    @CollectionTable(name = "FAVORITE_FOOD", joinColumns = @JoinColumn(name = "MEMBER_ID"))
-    @Column(name = "FOOD_NAME")
-    private Set<String> favoriteFoods = new HashSet<>();
+    @ManyToOne(fetch = FetchType.LAZY)  // 무조건 LAZY로 잡으라고 했지?
+    @JoinColumn(name = "TEAM_ID")
+    private Team team;
 
-//    @ElementCollection
-//    @CollectionTable(name = "ADDRESS", joinColumns = @JoinColumn(name = "MEMBER_ID"))
-//    private List<Address> addressHistory = new ArrayList<>();
+    @Enumerated(EnumType.STRING)
+    private MemoryType type;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "MEMBER_ID")
-    private List<AddressEntity> addressHistory = new ArrayList<>();
-
-    public Member() {
+    public void changeTeam(Team team) {
+        this.team = team;
+        team.getMembers().add(this);
     }
 
     public Long getId() {
@@ -53,27 +48,27 @@ public class Member {
         this.username = username;
     }
 
-    public Address getHomeAddress() {
-        return homeAddress;
+    public int getAge() {
+        return age;
     }
 
-    public void setHomeAddress(Address homeAddress) {
-        this.homeAddress = homeAddress;
+    public void setAge(int age) {
+        this.age = age;
     }
 
-    public Set<String> getFavoriteFoods() {
-        return favoriteFoods;
+    public Team getTeam() {
+        return team;
     }
 
-    public void setFavoriteFoods(Set<String> favoriteFoods) {
-        this.favoriteFoods = favoriteFoods;
+    public void setTeam(Team team) {
+        this.team = team;
     }
 
-    public List<AddressEntity> getAddressHistory() {
-        return addressHistory;
+    public MemoryType getType() {
+        return type;
     }
 
-    public void setAddressHistory(List<AddressEntity> addressHistory) {
-        this.addressHistory = addressHistory;
+    public void setType(MemoryType type) {
+        this.type = type;
     }
 }
